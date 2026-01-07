@@ -8,6 +8,10 @@ import pandas as pd
 # ===== Paths =====
 base_folder = r"murid"
 excel_file = r"test.xlsx"
+# ===== Image Upload Path =====
+IMAGE_DIR = "uploaded_images"
+os.makedirs(IMAGE_DIR, exist_ok=True)
+
 
 # ===== Function to set background =====
 def add_bg_from_local(image_file):
@@ -215,3 +219,18 @@ if st.button("📊 Show Attendance Analysis"):
     st.subheader("📊 Attendance Analysis")
     analyze_attendance()
 
+st.markdown("---")
+st.subheader("📸 Upload Photo (Phone Camera)")
+
+uploaded_img = st.camera_input("Take a picture")
+
+if uploaded_img is not None:
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"photo_{timestamp}.jpg"
+    filepath = os.path.join(IMAGE_DIR, filename)
+
+    with open(filepath, "wb") as f:
+        f.write(uploaded_img.getbuffer())
+
+    st.success(f"✅ Image saved: {filename}")
+    st.image(uploaded_img, caption="Captured Image", use_container_width=True)
